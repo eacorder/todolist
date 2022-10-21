@@ -57,13 +57,14 @@ main {
 
 .float:hover,
 .float:focus {
-box-shadow: 2px 2px 3px #999;
+  box-shadow: 2px 2px 3px #999;
   transform: translateY(-0.25em);
   background-color: #6d597a ;
   border-left: 5px   #584266   solid;
   border-right: 5px   #584266   solid;
   border-top: 5px   #584266   solid;
   border-bottom: 10px   #584266   solid;
+  cursor: pointer;
 }
 
 .icon {
@@ -377,4 +378,14 @@ ul {
 
 .viewButton:hover, .removeButton:hover {
   transform: translateY(-0.25em);
+}
+
+.confirmationModal {
+  display: flex;
+  justify-content: end;
+  column-gap: 10px;
+}
+
+.textConfirmation {
+  font-size: 25px;
 }

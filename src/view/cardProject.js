@@ -11,6 +11,8 @@ export function cardProject(project) {
     const remove = document.createElement("a");
     title.innerHTML = project.title;
     description.innerHTML = project.description;
+    
+    remove.setAttribute("data-id",project.id);
     description.classList.add("cardDescription")
     title.classList.add("cardTitle")
     footer.classList.add("cardFooter")
