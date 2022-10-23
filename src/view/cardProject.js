@@ -9,9 +9,11 @@ export function cardProject(project) {
     const footer = document.createElement("div");
     const view = document.createElement("a");
     const remove = document.createElement("a");
+    const taskIndex = document.querySelector(".taskContainer"); 
     title.innerHTML = project.title;
+    taskIndex.innerHTML ="";
     description.innerHTML = project.description;
-    
+    view.setAttribute("data-id",project.id);
     remove.setAttribute("data-id",project.id);
     description.classList.add("cardDescription")
     title.classList.add("cardTitle")

@@ -3,7 +3,8 @@ import { cardProject } from "./view/cardProject";
 import { home } from "./view/home";
 import { modalConfirmacion } from "./view/modal/modalConfirmacion";
 import { projectModal } from "./view/modal/projectModal";
- 
+import { taskIndex } from "./view/taskIndex";
+import { modalNewTask } from "./view/modal/modalNewTask";
 
 export function index() {
     home();
@@ -30,11 +31,13 @@ export function saveProject () {
     localStorage.setItem("projects", JSON.stringify(savedProjects) );  
    
 }
-function confirmation (id) {
-    const modal = document.querySelector(".modal");    
-    modalConfirmacion();
-    openModal(modal);
+
+function getProjectByid (id) { 
+    const savedProjects = getProjects();
     
+    const project = savedProjects.find(x => x.id === +id)
+    
+    return project;
 }
 
 function getProjects () {
@@ -54,13 +57,50 @@ function renderProjects () {
         cardProject(project);
 
     } 
+  
+    const viewButton = document.querySelectorAll(".viewButton");
+    viewButton.forEach((button) => { 
+        button.addEventListener('click', () => taskMaker(getProjectByid(button.getAttribute("data-id")))  );
+    });
 
-    
     const removeButton = document.querySelectorAll(".removeButton");
     removeButton.forEach((button) => { 
         button.addEventListener('click', () => confirmation(button.getAttribute("data-id"))  );
     });
      
+}
+
+function taskMaker (project) {
+   
+    taskIndex(project);
+    const button = document.querySelector('.addTaskButton');     
+    button.addEventListener('click', () => {
+         event.preventDefault()          
+         openNewTask();
+     });
+
+}
+
+function confirmation (id) {
+    const modal = document.querySelector(".modal");    
+    modalConfirmacion();
+    openModal(modal);
+
+
+    const button = document.querySelector('#yesButton');     
+    button.addEventListener('click', () => {
+         event.preventDefault()          
+         removeProject(id);       
+         closeModal(modal);       
+         renderProjects();
+     });
+
+     const close = document.querySelector('#noButton');     
+     close.addEventListener('click', () => {
+         event.preventDefault()          
+         closeModal(modal);       
+     });
+   
 }
 
 function openProjects (modal) { 
@@ -77,6 +117,22 @@ function openProjects (modal) {
  
 }
 
+function openNewTask () { 
+    const modal = document.querySelector(".modal");    
+    modalNewTask();
+    openModal(modal);
+     //save project 
+     const form = document.querySelector('#saveProject');    
+     form.addEventListener('click', () => {
+         event.preventDefault()
+         saveProject();       
+         closeModal(modal);       
+         renderProjects();
+     });
+ 
+}
+
+
 function events (){   
 
     //open modal
@@ -87,10 +143,11 @@ function events (){
     // close modal  
     const closeProject = document.querySelector(".close");
     closeProject.addEventListener("click", () => closeModal(modal) );
-    
-   
-  
 
+     // close modal  
+     const home = document.querySelector(".home");
+     home.addEventListener("click", () => renderProjects() );
+    
 }
 
 function removeProject (id) {
@@ -101,13 +158,9 @@ function removeProject (id) {
     }), 1);
     localStorage.removeItem('projects');
     localStorage.setItem('projects',JSON.stringify(savedProjects));
-    renderProjects();
+   
 
 }   
-
-
-
-
 
 function openModal (modal) {
     
@@ -126,3 +179,4 @@ function cleanModal() {
     input.value = '';
   });
 }
+

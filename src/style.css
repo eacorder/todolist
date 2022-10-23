@@ -126,6 +126,11 @@ h2 {
     font-size: 28px;
 }
 
+.home:before {    
+  font-family: 'FontAwesome';
+  content: '\f015';
+  margin:0 10px 0 -15px;
+}
 
 .today:before {    
     font-family: 'FontAwesome';
@@ -388,4 +393,15 @@ ul {
 
 .textConfirmation {
   font-size: 25px;
+}
+
+.taskContainer { 
+  margin: 20px;
+  display: flex;
+  column-gap: 20px;
+  align-items: center;
+}
+
+.taskContainer > button {
+  height: 20%;
 }
