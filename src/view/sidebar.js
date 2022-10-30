@@ -10,7 +10,7 @@ export function sidebar () {
     const today = document.createElement("li");
     const priority = document.createElement("li");
     const month = document.createElement("li");
-    home.innerHTML = "Home"
+    home.innerHTML = "All Projects"
     home.classList.add("home");
     today.innerHTML = "Today"
     today.classList.add("today");

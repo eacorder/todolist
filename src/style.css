@@ -32,7 +32,7 @@ main {
     border-right: 5px   #355070   solid;
     border-top: 5px   #355070   solid;
     border-bottom: 10px   #355070   solid;
-    overflow-y: scroll;
+    overflow: auto;
    
      
 }
@@ -111,7 +111,7 @@ sidebar > div:last-child {
 li {
     font-size: 1.5rem;
     margin-bottom:18px; 
-    cursor: pointer;
+    cursor: pointer; 
 }
 
 li:hover,
@@ -312,12 +312,7 @@ ul {
       transform: translate(2px, 2px);
     }
     
-    @media (min-width: 768px) {
-      .button {
-        min-width: 120px;
-        padding: 0 25px;
-      }
-    }
+    
  
 /* Style for cards projects */
 
@@ -328,7 +323,7 @@ ul {
    grid-row-gap: 20px;
    grid-column-gap: 10px;
    margin: 20px;
-   justify-items: center;
+   justify-items: center; 
 }
 
 .card {
@@ -395,13 +390,153 @@ ul {
   font-size: 25px;
 }
 
-.taskContainer { 
+.headerTask { 
   margin: 20px;
   display: flex;
   column-gap: 20px;
   align-items: center;
+  border-bottom: 4px solid #355070;
 }
 
-.taskContainer > button {
+.headerTask > button {
   height: 20%;
+}
+
+.priorityContainer {
+  display: flex;
+  align-items: center;
+  column-gap: 20px;
+}
+
+.priorityContainer > label.input{ 
+  flex: 1;
+}
+
+.form-control { 
+  font-size: 1.4rem;
+  font-weight: bold;
+  line-height: 1.1;
+  display: grid;
+  grid-template-columns: 1em auto;
+  gap: 0.5em;
+  color: #355070;
+}
+
+.form-control + .form-control {
+  margin-top: 1em;
+}
+
+.form-control--disabled {
+  color: var(--form-control-disabled);
+  cursor: not-allowed;
+}
+
+input[type="checkbox"] {
+  /* Add if not using autoprefixer */
+  -webkit-appearance: none;
+  /* Remove most all native input styles */
+  appearance: none;
+  /* For iOS < 15 */
+  background-color: var(--form-background);
+  /* Not removed via appearance */
+  margin: 0;
+
+  font: inherit;
+  color: #355070;
+  width: 1.15em;
+  height: 1.15em;
+  border: 0.15em solid #355070;
+  border-radius: 0.15em;
+  transform: translateY(-0.075em);
+
+  display: grid;
+  place-content: center;
+}
+
+input[type="checkbox"]::before {
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  transform: scale(0);
+  transform-origin: bottom left;
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em #6d597a;
+  /* Windows High Contrast Mode */
+  background-color: #355070;
+}
+
+input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+input[type="checkbox"]:focus {
+  outline: max(2px, 0.15em) solid currentColor;
+  outline-offset: max(2px, 0.15em);
+}
+
+.taskList  {
+  margin-top: 2rem; 
+   
+}
+
+
+.taskList > li{
+  display: flex;
+  column-gap: 10px;
+  align-items: center;
+  margin-right: 15px;
+  border-bottom: 2px solid #355070;
+  justify-content: space-between;
+   
+}
+
+.taskContainer {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.liElements {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.dueDate {
+  font-size: 20px;
+  padding-bottom: 15px;
+}
+
+.taskList > li > button {
+  width: 3rem;
+  height: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.editTask {
+  background-color: #83af9b;
+   
+}
+
+.removeTask {
+  background-color: #e56b6f;
+}
+
+.favorite {
+  color: goldenrod;
+  font-size: 2rem;
+  
+}
+
+.checkTask {
+  cursor: pointer;
+}
+
+.textDecoration { 
+   
+  pointer-events:none;  
+  opacity:0.5;          
+ 
 }

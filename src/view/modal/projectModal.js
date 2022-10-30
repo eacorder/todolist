@@ -7,6 +7,8 @@ export function projectModal () {
     const inputTitle = document.createElement("input");
     const labelInputTitle = document.createElement("label");
     const spanlInputTitle = document.createElement("span");
+    
+    
 
  
 

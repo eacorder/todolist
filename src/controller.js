@@ -5,7 +5,7 @@ import { modalConfirmacion } from "./view/modal/modalConfirmacion";
 import { projectModal } from "./view/modal/projectModal";
 import { taskIndex } from "./view/taskIndex";
 import { modalNewTask } from "./view/modal/modalNewTask";
-
+import { Task } from "./model/task";
 export function index() {
     home();
     renderProjects();
@@ -29,7 +29,30 @@ export function saveProject () {
     
     savedProjects.push(project);
     localStorage.setItem("projects", JSON.stringify(savedProjects) );  
-   
+    return project;
+}
+
+export function saveTask (project) {
+    
+    const savedProjects = getProjects();
+    const indexOfProject = savedProjects.findIndex(std=> std.id === project.id);
+      
+    let id;
+    const taskInput = document.querySelector("#inputTask").value;
+    const date = document.querySelector("#inputDate").value;   
+    const priority = document.querySelector("#inputPriority").checked;    
+    if (savedProjects[indexOfProject].tasks == ""){
+        id = 1
+    } else { 
+        id = savedProjects[indexOfProject].tasks[savedProjects[indexOfProject].tasks.length - 1].id  + 1;
+        
+    }
+    const task = new Task ( id, taskInput,date ,priority, 0);   
+    savedProjects[indexOfProject].tasks.push(task);
+    
+    localStorage.setItem("projects", JSON.stringify(savedProjects) );  
+    return savedProjects;
+    
 }
 
 function getProjectByid (id) { 
@@ -39,6 +62,7 @@ function getProjectByid (id) {
     
     return project;
 }
+
 
 function getProjects () {
 
@@ -65,7 +89,7 @@ function renderProjects () {
 
     const removeButton = document.querySelectorAll(".removeButton");
     removeButton.forEach((button) => { 
-        button.addEventListener('click', () => confirmation(button.getAttribute("data-id"))  );
+        button.addEventListener('click', () => confirmation(button.getAttribute("data-id"),"project") , ""  );
     });
      
 }
@@ -76,12 +100,50 @@ function taskMaker (project) {
     const button = document.querySelector('.addTaskButton');     
     button.addEventListener('click', () => {
          event.preventDefault()          
-         openNewTask();
+         openNewTask(project);
+        
      });
 
+     const buttonEdit = document.querySelectorAll(".editTask");
+     buttonEdit.forEach((button) => { 
+         button.addEventListener('click', () => {
+            event.preventDefault()          
+             
+            openNewTask(project);
+
+        })  
+           
+     });
+
+     const buttonRemove = document.querySelectorAll(".removeTask");
+     buttonRemove.forEach((button) => { 
+         button.addEventListener('click', () => {
+            event.preventDefault()          
+             
+            openNewTask(project);
+            confirmation(button.getAttribute("data-id"),"task",button.getAttribute("task-id")) 
+        })  
+           
+     });
+    
+     
+     const checkTask = document.querySelectorAll(".checkTask");
+     checkTask.forEach((button) => { 
+         button.addEventListener('click', () => {
+            if ( button.checked ){
+                EditTask(project.id, button.getAttribute("task-id"))
+               
+            }         
+            
+          
+        //    confirmation(button.getAttribute("data-id"),"task",button.getAttribute("task-id")) 
+        })  
+           
+     });
+    
 }
 
-function confirmation (id) {
+function confirmation (id, type, taskId) {
     const modal = document.querySelector(".modal");    
     modalConfirmacion();
     openModal(modal);
@@ -89,10 +151,18 @@ function confirmation (id) {
 
     const button = document.querySelector('#yesButton');     
     button.addEventListener('click', () => {
-         event.preventDefault()          
-         removeProject(id);       
-         closeModal(modal);       
-         renderProjects();
+         event.preventDefault()  
+         if (type === "project") {
+            removeProject(id);   
+            renderProjects();   
+         }
+         else if ( type === "task" ) {
+            removeTask(id , taskId);   
+            taskMaker(getProjectByid(id))  
+         }
+                 
+        
+         closeModal(modal);      
      });
 
      const close = document.querySelector('#noButton');     
@@ -110,24 +180,25 @@ function openProjects (modal) {
      const form = document.querySelector('#saveProject');    
      form.addEventListener('click', () => {
          event.preventDefault()
-         saveProject();       
+         const savedProject = saveProject(); 
+         
          closeModal(modal);       
-         renderProjects();
+         taskMaker(savedProject)
      });
  
 }
 
-function openNewTask () { 
+function openNewTask (project) { 
     const modal = document.querySelector(".modal");    
     modalNewTask();
     openModal(modal);
      //save project 
-     const form = document.querySelector('#saveProject');    
+     const form = document.querySelector('#saveTask');    
      form.addEventListener('click', () => {
          event.preventDefault()
-         saveProject();       
+         saveTask(project);
          closeModal(modal);       
-         renderProjects();
+         taskMaker(getProjectByid(project.id))
      });
  
 }
@@ -158,9 +229,42 @@ function removeProject (id) {
     }), 1);
     localStorage.removeItem('projects');
     localStorage.setItem('projects',JSON.stringify(savedProjects));
-   
 
 }   
+
+function EditTask ( projectId, taskId ) {
+    
+    const savedProjects = getProjects();
+    const projectIndex = savedProjects.findIndex(function(i){
+        return i.id == projectId;
+    });
+  
+    const taskIndex = savedProjects[projectIndex].tasks.findIndex(function(i){
+        return i.id == taskId;
+    });
+    savedProjects[projectIndex].tasks[taskIndex].check = 1;    
+    localStorage.removeItem('projects');
+    localStorage.setItem('projects',JSON.stringify(savedProjects));
+    taskMaker(getProjectByid(projectId));
+} 
+
+
+function removeTask ( projectId, taskId ) {
+    
+    const savedProjects = getProjects();
+    const projectIndex = savedProjects.findIndex(function(i){
+        return i.id == projectId;
+    });
+  
+    const taskIndex = savedProjects[projectIndex].tasks.findIndex(function(i){
+        return i.id == taskId;
+    });
+    savedProjects[projectIndex].tasks.splice( taskIndex , 1 )    
+    localStorage.removeItem('projects');
+    localStorage.setItem('projects',JSON.stringify(savedProjects));
+
+}   
+
 
 function openModal (modal) {
     
