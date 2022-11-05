@@ -6,12 +6,16 @@ import { projectModal } from "./view/modal/projectModal";
 import { taskIndex } from "./view/taskIndex";
 import { modalNewTask } from "./view/modal/modalNewTask";
 import { Task } from "./model/task";
+
 export function index() {
-    home();
+
+    home();   
     renderProjects();
     events();
+    renderListProjects();
 }
 
+ 
 export function saveProject () {
     
     const savedProjects = getProjects();   
@@ -34,23 +38,38 @@ export function saveProject () {
 
 export function saveTask (project) {
     
-    const savedProjects = getProjects();
-    const indexOfProject = savedProjects.findIndex(std=> std.id === project.id);
-      
     let id;
     const taskInput = document.querySelector("#inputTask").value;
     const date = document.querySelector("#inputDate").value;   
-    const priority = document.querySelector("#inputPriority").checked;    
-    if (savedProjects[indexOfProject].tasks == ""){
-        id = 1
-    } else { 
-        id = savedProjects[indexOfProject].tasks[savedProjects[indexOfProject].tasks.length - 1].id  + 1;
+    const priority = document.querySelector("#inputPriority").checked;  
+    const inputId = document.querySelector("#inputTaskId").value;  
+
+    const savedProjects = getProjects();
+    const indexOfProject = savedProjects.findIndex(std=> std.id === project.id);
+      
+    if (inputId == "") {
+
+        if (savedProjects[indexOfProject].tasks == ""){
+            id = 1
+        } else { 
+            id = savedProjects[indexOfProject].tasks[savedProjects[indexOfProject].tasks.length - 1].id  + 1;
+            
+        }
+        const task = new Task ( id, taskInput,date ,priority, 0);   
+        savedProjects[indexOfProject].tasks.push(task);
         
+        localStorage.setItem("projects", JSON.stringify(savedProjects) );  
+
+    } else {
+
+        editDataTask(project, inputId);
+
     }
-    const task = new Task ( id, taskInput,date ,priority, 0);   
-    savedProjects[indexOfProject].tasks.push(task);
     
-    localStorage.setItem("projects", JSON.stringify(savedProjects) );  
+
+
+
+
     return savedProjects;
     
 }
@@ -75,9 +94,12 @@ function renderProjects () {
 
     const projects = getProjects();
     const content = document.querySelector(".cards");
+    const contentTask = document.querySelector(".taskContainer");
     content.innerHTML = "";
     for (var project of projects) 
     {
+        content.classList.remove("displayFalse")
+        contentTask.classList.remove("displayTrue")
         cardProject(project);
 
     } 
@@ -92,6 +114,47 @@ function renderProjects () {
         button.addEventListener('click', () => confirmation(button.getAttribute("data-id"),"project") , ""  );
     });
      
+}
+
+
+
+function editDataTask (project , task ) {
+    const taskTitle = document.querySelector("#inputTask").value;
+    const taskDate = document.querySelector("#inputDate").value;
+    const taskPriority = document.querySelector("#inputPriority").checked;
+
+    const savedProjects = getProjects();
+    const projectIndex = savedProjects.findIndex(function(i){
+        return i.id == project.id;
+    });
+  
+    const taskIndex = savedProjects[projectIndex].tasks.findIndex(function(i){
+        return i.id == task;
+    });
+    savedProjects[projectIndex].tasks[taskIndex].title = taskTitle;     
+    savedProjects[projectIndex].tasks[taskIndex].dueDate = taskDate;  
+    savedProjects[projectIndex].tasks[taskIndex].priority = taskPriority;  
+    localStorage.removeItem('projects');
+    localStorage.setItem('projects',JSON.stringify(savedProjects));
+}
+
+function getDataTask (project,taskId) {
+    const taskTitle = document.querySelector("#inputTask");
+    const taskDate = document.querySelector("#inputDate");
+    const taskPriority = document.querySelector("#inputPriority");
+    const taskIdInput = document.querySelector("#inputTaskId");
+    const savedProjects = getProjects();
+    const projectIndex = savedProjects.findIndex(function(i){
+        return i.id == project.id;
+    });
+  
+    const taskIndex = savedProjects[projectIndex].tasks.findIndex(function(i){
+        return i.id == taskId;
+    });
+    taskTitle.value =  savedProjects[projectIndex].tasks[taskIndex].title ;
+    taskDate.value =  savedProjects[projectIndex].tasks[taskIndex].dueDate ;
+    taskPriority.checked =  savedProjects[projectIndex].tasks[taskIndex].priority ;
+    taskIdInput.value =  savedProjects[projectIndex].tasks[taskIndex].id ;
 }
 
 function taskMaker (project) {
@@ -110,7 +173,7 @@ function taskMaker (project) {
             event.preventDefault()          
              
             openNewTask(project);
-
+            getDataTask(project, button.getAttribute("task-id"));
         })  
            
      });
@@ -183,10 +246,30 @@ function openProjects (modal) {
          const savedProject = saveProject(); 
          
          closeModal(modal);       
-         taskMaker(savedProject)
+         taskMaker(savedProject); 
+         renderListProjects();
      });
  
 }
+
+function renderListProjects () { 
+    const projects = getProjects();
+    const content = document.querySelector("#listOfProjects"); 
+    content.innerHTML = "";
+    projects.forEach(element => {
+        const listItem = document.createElement("li");
+        listItem.setAttribute("id", "projectSidebarList")
+        listItem.setAttribute("data-id",element.id)
+        listItem.innerHTML = element.title;
+        content.appendChild(listItem);
+    });
+    const viewButton = document.querySelectorAll("#projectSidebarList");
+    viewButton.forEach((button) => { 
+        
+        button.addEventListener('click', () => taskMaker(getProjectByid(button.getAttribute("data-id")))  );
+    });
+}
+
 
 function openNewTask (project) { 
     const modal = document.querySelector(".modal");    

@@ -1,28 +1,28 @@
 html {
     height: 100vh;
-    display: flex;
-    
+     
 }
 
 body { 
-    flex: 1;
+    
     background-color: #eaac8bb0;    
     display: flex;
     justify-content: center;
-    align-items: center;
-    font-family: 'Play', sans-serif;
     
+    font-family: 'Play', sans-serif;
+    height: 100vh;
+    margin: 0;
 }
 
 .container { 
     display: grid;
-    grid-template-columns: 1fr 3fr;
-    grid-template-rows: 1fr 8fr;
+    grid-template-columns:  1fr 3fr;
+    grid-template-rows: 1fr  7fr;    
+    margin-top: 50px;
+    border-radius: 20px 20px;    
+    height: 88%;
     width: 85%;
-    height: 85%;
-    background-color: white;     
-    border-radius: 20px 20px;
-   
+    background-color: white;
 }
 
 
@@ -32,9 +32,10 @@ main {
     border-right: 5px   #355070   solid;
     border-top: 5px   #355070   solid;
     border-bottom: 10px   #355070   solid;
-    overflow: auto;
-   
-     
+    overflow: hidden;
+    display: flex;
+    
+    grid-column: 2 / 3;
 }
 
 .float{
@@ -85,6 +86,7 @@ navbar {
 }
 
 sidebar{
+    flex: 1;
     display: flex;
     flex-direction: column;
     grid-column: 1/ 2; 
@@ -94,20 +96,36 @@ sidebar{
     border-top: 5px   #355070   solid;
     border-bottom: 10px   #355070   solid;
     color: white; 
-     
+    grid-row: 2 / 3;
+    overflow: hidden;
 }
 
-.section{    
-    padding: 2rem;
+.section{     
+    display: flex;
+    flex-direction: column;
+    padding-left: 2rem;
+    padding-right: 2rem;  
+   
 }
 
-sidebar > div:first-child {
-    flex: 0.25;
-}
-sidebar > div:last-child {
-    flex: 0.75;
+
+
+.section ul {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
 }
 
+#projectList {
+  overflow: hidden;
+  flex: 1;
+}
+ 
+#projectList > ul {
+  list-style: inside;
+}
+ 
 li {
     font-size: 1.5rem;
     margin-bottom:18px; 
@@ -154,6 +172,7 @@ h2 {
 ul {
     list-style:none;
     padding-left:20px;
+    
 }
 
 
@@ -324,11 +343,14 @@ ul {
    grid-column-gap: 10px;
    margin: 20px;
    justify-items: center; 
+   overflow-y: auto;
+  background-color:  white;
+   flex: 1;
 }
 
 .card {
   width: 200px;
-  height: auto;
+  height: 200px;
   background-color: #6d597a;  
   color:white; 
   box-shadow: 0 8px 16px -8px rgba(0,0,0,0.4);
@@ -398,10 +420,7 @@ ul {
   border-bottom: 4px solid #355070;
 }
 
-.headerTask > button {
-  height: 20%;
-}
-
+ 
 .priorityContainer {
   display: flex;
   align-items: center;
@@ -475,12 +494,6 @@ input[type="checkbox"]:focus {
   outline-offset: max(2px, 0.15em);
 }
 
-.taskList  {
-  margin-top: 2rem; 
-   
-}
-
-
 .taskList > li{
   display: flex;
   column-gap: 10px;
@@ -494,6 +507,12 @@ input[type="checkbox"]:focus {
 .taskContainer {
   padding-left: 2rem;
   padding-right: 2rem;
+  display: none;
+ 
+}
+
+.taskContainer > ul {
+  overflow-y: auto;
 }
 
 .liElements {
@@ -539,4 +558,15 @@ input[type="checkbox"]:focus {
   pointer-events:none;  
   opacity:0.5;          
  
+}
+ 
+
+.displayTrue {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.displayFalse {
+  display: none;
 }

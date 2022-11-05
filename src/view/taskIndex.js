@@ -6,6 +6,7 @@ export function taskIndex(project) {
     const taskIndex = document.querySelector(".taskContainer"); 
     cards.innerHTML = "";
     taskIndex.innerHTML ="";
+
     const title = document.createElement("h1")
     const addTask = document.createElement('button'); 
   
@@ -13,14 +14,17 @@ export function taskIndex(project) {
     const list = document.createElement("ul");
     addTask.innerHTML = 'Add Task <i class="icon fa fa-plus"></i>';
     taskIndex.innerHTML = "";
- 
+
+    taskIndex.classList.add("displayTrue");
+    cards.classList.add("displayFalse");
+
     addTask.classList.add("button");
     addTask.classList.add("addTaskButton");
     list.classList.add("taskList");
     addTask.setAttribute("data-id",project.id);
     title.innerHTML = project.title;  
 
-    project.tasks.sort((a, b) => Number(a.check) - Number(b.check)).forEach(element => {
+    project.tasks.sort((a, b) => Number(b.priority) - Number(a.priority)).sort((a, b) => Number(a.check) - Number(b.check)).forEach(element => {
         let favorite = "";
         let checkDiv = "";
         let checked  = false; 

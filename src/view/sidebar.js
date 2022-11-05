@@ -1,5 +1,6 @@
+ 
 
-export function sidebar () {      
+export function sidebar ( ) {      
     const sidebar = document.createElement("sidebar");
     const section1 = document.createElement("div");
     const section2 = document.createElement("div");
@@ -10,6 +11,7 @@ export function sidebar () {
     const today = document.createElement("li");
     const priority = document.createElement("li");
     const month = document.createElement("li");
+    const projectList = document.createElement("ul");
     home.innerHTML = "All Projects"
     home.classList.add("home");
     today.innerHTML = "Today"
@@ -19,18 +21,23 @@ export function sidebar () {
     month.innerHTML = "This Month"
     month.classList.add("month");
     list.appendChild(home);
-    list.appendChild(today);
-    list.appendChild(priority);
-    list.appendChild(month);
+    //list.appendChild(today);
+    //list.appendChild(priority);
+    //list.appendChild(month);
     title1.innerHTML = "Filters";
     title2.innerHTML = "Projects"; 
     section1.classList.add("section");
     section2.classList.add("section");
+    section2.setAttribute("id","projectList")
     title1.classList.add("titleSidebar");
     title2.classList.add("titleSidebar");
+    projectList.setAttribute("id","listOfProjects")
+   
+
     section1.appendChild(title1);
     section1.appendChild(list);
-    section2.appendChild(title2);
+    section2.appendChild(title2); 
+    section2.appendChild(projectList);
     sidebar.appendChild(section1);
     sidebar.appendChild(section2);
     return sidebar;

@@ -2,6 +2,7 @@
 export function modalNewTask(project) { 
     const modalBody = document.querySelector(".modal-body"); 
     modalBody.innerHTML = "";
+    const inputId = document.createElement("input");
     const inputTitle = document.createElement("input");
     const labelInputTitle = document.createElement("label");
     const spanlInputTitle = document.createElement("span");
@@ -13,6 +14,10 @@ export function modalNewTask(project) {
     const inputDate = document.createElement("input");
     const labelDate = document.createElement("label"); 
     const spanlInputDate = document.createElement("span");
+
+    inputId.setAttribute("id","inputTaskId");
+    inputId.style.display = "none"; 
+    inputId.value = "";
 
     inputDate.setAttribute("id","inputDate");    
     labelDate.classList.add("input")
@@ -54,7 +59,7 @@ export function modalNewTask(project) {
     button.innerHTML = "Save"
     button.setAttribute("id","saveTask"); 
    
-   
+    modalBody.appendChild(inputId); 
     modalBody.appendChild(labelInputTitle); 
     modalBody.appendChild(priorityContainer); 
 
